@@ -25,6 +25,7 @@ export default function Dashboard() {
         "/api/stripe/checkout",
         {
           email: auth.user.primaryEmailAddress?.emailAddress,
+          clerkId: auth.user.id,
         },
       );
 

@@ -45,11 +45,8 @@ export default async function handler(
   // update user to paid
   if (event.type === "checkout.session.completed") {
     if (event.data.object.customer_email) {
-      const user = await db.candidate.update({
-        where: { email: event.data.object.customer_email },
-        data: { type: "PAID" },
-      });
-      await clerkClient.users.updateUserMetadata(user.clerkId, {
+      const clerkId = event.data?.object?.metadata?.clerkId;
+      await clerkClient.users.updateUserMetadata(clerkId!, {
         publicMetadata: {
           type: "PAID",
         },

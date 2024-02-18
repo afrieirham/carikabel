@@ -9,6 +9,7 @@ const productIt = process.env.STRIPE_PRODUCT_ID!;
 interface ExtendedNextApiRequest extends NextApiRequest {
   body: {
     email: string;
+    clerkId: string;
   };
 }
 
@@ -20,12 +21,13 @@ export default async function handler(
     return res.status(405).json({ message: "method not allowed" });
   }
 
-  const { email } = req.body;
+  const { email, clerkId } = req.body;
 
   try {
     const baseUrl = getBaseUrl();
 
     const checkoutSession = await stripe.checkout.sessions.create({
+      metadata: { clerkId },
       mode: "subscription",
       cancel_url: `${baseUrl}/dashboard`,
       success_url: `${baseUrl}/dashboard`,
