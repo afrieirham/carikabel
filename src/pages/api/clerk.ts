@@ -61,5 +61,7 @@ export default async function handler(
     await db.candidate.create({ data: { clerkId } });
   }
 
+  // TODO handle user.deleted
+
   return res.status(200).json({ response: "Success" });
 }
