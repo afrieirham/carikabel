@@ -58,7 +58,11 @@ export default async function handler(
 
   if (evt.type === "user.created") {
     const clerkId = evt.data.id;
-    await db.candidate.create({ data: { clerkId } });
+    const email = evt.data.email_addresses[0]?.email_address;
+    if (email) {
+      await db.candidate.create({ data: { clerkId, email } });
+    }
+    // no email
   }
 
   // TODO handle user.deleted

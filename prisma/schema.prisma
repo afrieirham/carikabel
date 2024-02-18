@@ -13,6 +13,7 @@ datasource db {
 model Candidate {
     id        String   @id @default(cuid())
     type      Type     @default(FREE)
+    email     String   @unique
     clerkId   String   @unique
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
