@@ -12,9 +12,31 @@ datasource db {
 
 model Candidate {
     id        String   @id @default(cuid())
-    name      String
     type      Type     @default(FREE)
     clerkId   String   @unique
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Company {
+    id          String     @id @default(cuid())
+    name        String
+    jobsUrl     String
+    linkedinUrl String
+    logoUrl     String
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+    Referrer    Referrer[]
+}
+
+model Referrer {
+    id        String   @id @default(cuid())
+    name      String
+    phone     String
+    email     String   @unique
+    jobTitle  String
+    companyId String?
+    company   Company? @relation(fields: [companyId], references: [id])
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
