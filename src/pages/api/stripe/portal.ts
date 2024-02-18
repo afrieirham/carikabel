@@ -4,12 +4,10 @@ import Stripe from "stripe";
 import { getBaseUrl } from "~/utils/api";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-const productId = process.env.STRIPE_PRODUCT_ID!;
 
 interface ExtendedNextApiRequest extends NextApiRequest {
   body: {
-    email: string;
-    clerkId: string;
+    stripeId: string;
   };
 }
 
@@ -21,21 +19,17 @@ export default async function handler(
     return res.status(405).json({ message: "method not allowed" });
   }
 
-  const { email, clerkId } = req.body;
+  const { stripeId } = req.body;
 
   try {
     const baseUrl = getBaseUrl();
 
-    const checkoutSession = await stripe.checkout.sessions.create({
-      metadata: { clerkId },
-      mode: "subscription",
-      cancel_url: `${baseUrl}/dashboard`,
-      success_url: `${baseUrl}/dashboard`,
-      line_items: [{ price: productId, quantity: 1 }],
-      customer_email: email,
+    const session = await stripe.billingPortal.sessions.create({
+      customer: stripeId,
+      return_url: `${baseUrl}/dashboard`,
     });
 
-    res.status(200).json({ redirect: checkoutSession.url });
+    res.status(200).json({ redirect: session.url });
   } catch (error) {
     res.status(500).json({ statusCode: 500, message: "Internal server error" });
   }

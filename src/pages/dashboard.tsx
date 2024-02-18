@@ -29,9 +29,22 @@ export default function Dashboard() {
         },
       );
 
-      if (!data) {
-        alert("sre");
-      }
+      void router.push(data.redirect);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onManageBilling = async () => {
+    setLoading(true);
+    try {
+      const { data }: { data: { redirect: string } } = await axios.post(
+        "/api/stripe/portal",
+        {
+          stripeId: auth.user.publicMetadata.stripeId,
+        },
+      );
+
       void router.push(data.redirect);
     } catch (error) {
       console.log(error);
@@ -42,16 +55,23 @@ export default function Dashboard() {
     <>
       <main className="flex h-screen w-full flex-col items-center justify-center space-y-2">
         <UserButton showName />
-        {isPaid && <p>Paid User</p>}
-        {!isPaid && (
-          <Button onClick={onSubscribe} disabled={loading}>
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Subscribe
-          </Button>
-        )}
-        <SignOutButton signOutCallback={() => router.push("/")}>
-          <Button>Logout</Button>
-        </SignOutButton>
+        <div className="flex space-x-2">
+          {isPaid && (
+            <Button onClick={onManageBilling} disabled={loading}>
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Manage Billing
+            </Button>
+          )}
+          {!isPaid && (
+            <Button onClick={onSubscribe} disabled={loading}>
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Subscribe
+            </Button>
+          )}
+          <SignOutButton signOutCallback={() => router.push("/")}>
+            <Button>Logout</Button>
+          </SignOutButton>
+        </div>
       </main>
     </>
   );
