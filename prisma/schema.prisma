@@ -10,11 +10,17 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
+model User {
+    id        String   @id @default(cuid())
     name      String
+    role      Role[]   @default([FREE])
+    clerkId   String   @unique
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
 
-    @@index([name])
+enum Role {
+    FREE
+    PAID
+    REFERRER
 }
