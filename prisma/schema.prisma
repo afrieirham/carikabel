@@ -10,17 +10,16 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model User {
+model Candidate {
     id        String   @id @default(cuid())
     name      String
-    role      Role[]   @default([FREE])
+    type      Type     @default(FREE)
     clerkId   String   @unique
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }
 
-enum Role {
+enum Type {
     FREE
     PAID
-    REFERRER
 }
