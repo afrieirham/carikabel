@@ -48,7 +48,6 @@ export default async function handler(
       const clerkId = event.data?.object?.metadata?.clerkId;
       await clerkClient.users.updateUserMetadata(clerkId!, {
         publicMetadata: {
-          type: "PAID",
           stripeId: event?.data?.object.customer,
         },
       });

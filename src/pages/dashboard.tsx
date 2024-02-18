@@ -10,7 +10,7 @@ export default function Dashboard() {
   const auth = useUser();
   const router = useRouter();
 
-  const isPaid = auth.user?.publicMetadata.type === "PAID";
+  const isPaid = Boolean(auth.user?.publicMetadata.stripeId);
 
   if (!auth.user) {
     return null;
