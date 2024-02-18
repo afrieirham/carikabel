@@ -1,7 +1,7 @@
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
-export const userRouter = createTRPCRouter({
+export const candidateRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
-    return ctx.db.user.findMany({ take: 10 });
+    return ctx.db.candidate.findMany({ take: 10 });
   }),
 });

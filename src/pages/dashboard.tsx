@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
 
 export default function Dashboard() {
-  const response = api.user.getAll.useQuery();
+  const response = api.candidate.getAll.useQuery();
   const auth = useUser();
   const router = useRouter();
 
@@ -12,7 +12,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <main>
+      <main className="flex h-screen w-full flex-col items-center justify-center">
         <p>Hello World</p>
         <SignOutButton signOutCallback={() => router.push("/")}>
           <Button>Logout</Button>
