@@ -18,11 +18,11 @@ export default async function handler(
     return res.status(405);
   }
 
-  const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+  const webhookSecret = process.env.CLERK_WEBHOOK_SECRET;
 
-  if (!WEBHOOK_SECRET) {
+  if (!webhookSecret) {
     throw new Error(
-      "Please add WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local",
+      "Please add CLERK_WEBHOOK_SECRET from Clerk Dashboard to .env or .env.local",
     );
   }
 
@@ -40,7 +40,7 @@ export default async function handler(
   const body = (await buffer(req)).toString();
 
   // Create a new Svix instance with your secret.
-  const wh = new Webhook(WEBHOOK_SECRET);
+  const wh = new Webhook(webhookSecret);
 
   let evt: WebhookEvent;
 
