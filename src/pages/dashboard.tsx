@@ -1,4 +1,4 @@
-import { SignOutButton, useUser } from "@clerk/nextjs";
+import { SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import { Button } from "~/components/ui/button";
 import { api } from "~/utils/api";
@@ -12,8 +12,8 @@ export default function Dashboard() {
 
   return (
     <>
-      <main className="flex h-screen w-full flex-col items-center justify-center">
-        <p>Hello World</p>
+      <main className="flex h-screen w-full flex-col items-center justify-center space-y-2">
+        <UserButton showName />
         <SignOutButton signOutCallback={() => router.push("/")}>
           <Button>Logout</Button>
         </SignOutButton>
