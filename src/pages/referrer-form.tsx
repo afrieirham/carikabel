@@ -13,9 +13,19 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { Input } from "~/components/ui/input";
+import { api } from "~/utils/api";
 
 function ReferrerFormPage() {
+  const { data: companies } = api.company.getAll.useQuery();
+
   const formSchema = z.object({
     name: z.string(),
     phone: z.string(),
@@ -41,17 +51,19 @@ function ReferrerFormPage() {
     console.log(values);
   }
 
+  console.log(companies);
+
   return (
     <main className="mx-auto flex h-screen w-full max-w-md flex-col items-center justify-center space-y-2">
       <Button asChild variant="link">
         <Link href="/dashboard">back</Link>
       </Button>
-      <h1 className="text-2xl">About You</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full space-y-8"
         >
+          <h1 className="text-2xl">About You</h1>
           <FormField
             control={form.control}
             name="name"
@@ -110,6 +122,26 @@ function ReferrerFormPage() {
               </FormItem>
             )}
           />
+          <h1 className="text-2xl">Your Company</h1>
+          <Select>
+            <SelectTrigger>
+              <SelectValue placeholder="Choose or add your company" />
+            </SelectTrigger>
+            <SelectContent className="">
+              {companies?.map((company) => (
+                <SelectItem key={company.id} value={company.id}>
+                  <div className="flex items-center space-x-2">
+                    <img
+                      src={company.logoUrl}
+                      className="h-6 w-6 rounded-sm border"
+                      alt=""
+                    />
+                    <span>{company.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           <Button type="submit">Submit</Button>
         </form>
       </Form>
