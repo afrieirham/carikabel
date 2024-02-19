@@ -32,7 +32,7 @@ import { db } from "~/server/db";
  *
  * @see https://create.t3.gg/en/usage/trpc#-serverapitrpcts
  */
-const createTRPCContext = async (opts: CreateNextContextOptions) => {
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const session = getAuth(opts.req);
   return { db, currentUserId: session.userId };
 };
