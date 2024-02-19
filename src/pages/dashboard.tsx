@@ -1,10 +1,12 @@
 import { SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
+import { addYears, formatDistanceToNow, parseISO } from "date-fns";
 import { Loader2 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+
 import { Button } from "~/components/ui/button";
-import { addYears, formatDistanceToNow, parseISO } from "date-fns";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(false);
@@ -38,31 +40,33 @@ export default function Dashboard() {
   };
 
   return (
-    <>
-      <main className="flex h-screen w-full flex-col items-center justify-center space-y-2">
-        <UserButton showName />
-        <div className="flex flex-col space-y-2">
-          {hasAccess && (
-            <>
-              <p>
-                Expired{" "}
-                {formatDistanceToNow(parseISO(expiredAt), {
-                  addSuffix: true,
-                })}
-              </p>
-            </>
-          )}
-          {!hasAccess && (
-            <Button onClick={onSubscribe} disabled={loading}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Subscribe
-            </Button>
-          )}
-          <SignOutButton signOutCallback={() => router.push("/")}>
-            <Button>Logout</Button>
-          </SignOutButton>
-        </div>
-      </main>
-    </>
+    <main className="flex h-screen w-full flex-col items-center justify-center space-y-2">
+      <UserButton showName />
+      <div className="flex flex-col space-y-2">
+        {hasAccess && (
+          <>
+            <p>
+              Expired{" "}
+              {formatDistanceToNow(parseISO(expiredAt), {
+                addSuffix: true,
+              })}
+            </p>
+          </>
+        )}
+        {!hasAccess && (
+          <Button onClick={onSubscribe} disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Subscribe
+          </Button>
+        )}
+
+        <Button asChild>
+          <Link href="/referrer-form">Be a referrer</Link>
+        </Button>
+        <SignOutButton signOutCallback={() => router.push("/")}>
+          <Button variant="ghost">Logout</Button>
+        </SignOutButton>
+      </div>
+    </main>
   );
 }
