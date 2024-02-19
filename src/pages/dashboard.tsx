@@ -37,22 +37,6 @@ export default function Dashboard() {
     }
   };
 
-  const onManageBilling = async () => {
-    setLoading(true);
-    try {
-      const { data }: { data: { redirect: string } } = await axios.post(
-        "/api/stripe/portal",
-        {
-          stripeId: auth.user.publicMetadata.stripeId,
-        },
-      );
-
-      void router.push(data.redirect);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
     <>
       <main className="flex h-screen w-full flex-col items-center justify-center space-y-2">
@@ -66,10 +50,6 @@ export default function Dashboard() {
                   addSuffix: true,
                 })}
               </p>
-              <Button onClick={onManageBilling} disabled={loading}>
-                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                Manage Billing
-              </Button>
             </>
           )}
           {!hasAccess && (
