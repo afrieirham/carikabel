@@ -31,6 +31,8 @@ export default async function handler(
 
     res.status(200).json({ redirect: session.url });
   } catch (error) {
+    // TODO handle error
+    console.log(error);
     res.status(500).json({ statusCode: 500, message: "Internal server error" });
   }
 }

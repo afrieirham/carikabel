@@ -4,19 +4,21 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Button } from "~/components/ui/button";
+import { addYears, formatDistanceToNow, parseISO } from "date-fns";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(false);
   const auth = useUser();
   const router = useRouter();
 
-  const isPaid = Boolean(auth.user?.publicMetadata.stripeId);
+  const today = new Date();
+  const expiredAt = auth.user?.publicMetadata.expiredAt as string;
+  const expiredDate = new Date(expiredAt);
+  const hasAccess = today < expiredDate;
 
   if (!auth.user) {
     return null;
   }
-
-  console.log(auth.user);
 
   const onSubscribe = async () => {
     setLoading(true);
@@ -26,9 +28,9 @@ export default function Dashboard() {
         {
           email: auth.user.primaryEmailAddress?.emailAddress,
           clerkId: auth.user.id,
+          expiredAt: addYears(today, 1).toISOString(),
         },
       );
-
       void router.push(data.redirect);
     } catch (error) {
       console.log(error);
@@ -55,14 +57,22 @@ export default function Dashboard() {
     <>
       <main className="flex h-screen w-full flex-col items-center justify-center space-y-2">
         <UserButton showName />
-        <div className="flex space-x-2">
-          {isPaid && (
-            <Button onClick={onManageBilling} disabled={loading}>
-              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Manage Billing
-            </Button>
+        <div className="flex flex-col space-y-2">
+          {hasAccess && (
+            <>
+              <p>
+                Expired{" "}
+                {formatDistanceToNow(parseISO(expiredAt), {
+                  addSuffix: true,
+                })}
+              </p>
+              <Button onClick={onManageBilling} disabled={loading}>
+                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Manage Billing
+              </Button>
+            </>
           )}
-          {!isPaid && (
+          {!hasAccess && (
             <Button onClick={onSubscribe} disabled={loading}>
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Subscribe

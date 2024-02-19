@@ -10,6 +10,7 @@ interface ExtendedNextApiRequest extends NextApiRequest {
   body: {
     email: string;
     clerkId: string;
+    expiredAt: string;
   };
 }
 
@@ -21,22 +22,25 @@ export default async function handler(
     return res.status(405).json({ message: "method not allowed" });
   }
 
-  const { email, clerkId } = req.body;
+  const { email, clerkId, expiredAt } = req.body;
 
   try {
     const baseUrl = getBaseUrl();
 
     const checkoutSession = await stripe.checkout.sessions.create({
-      metadata: { clerkId },
-      mode: "subscription",
+      metadata: { clerkId, expiredAt },
+      mode: "payment",
       cancel_url: `${baseUrl}/dashboard`,
       success_url: `${baseUrl}/dashboard`,
       line_items: [{ price: productId, quantity: 1 }],
       customer_email: email,
+      customer_creation: "always",
     });
 
     res.status(200).json({ redirect: checkoutSession.url });
   } catch (error) {
+    // TODO handle error
+    console.log(error);
     res.status(500).json({ statusCode: 500, message: "Internal server error" });
   }
 }

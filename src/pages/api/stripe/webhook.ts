@@ -2,7 +2,6 @@ import { clerkClient } from "@clerk/nextjs";
 import { buffer } from "micro";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
-import { db } from "~/server/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
@@ -43,13 +42,18 @@ export default async function handler(
   }
 
   // update user to paid
-  if (event.type === "checkout.session.completed") {
+  if (
+    event.type === "checkout.session.completed" &&
+    event.data.object.payment_status === "paid"
+  ) {
     if (event.data.object.customer_email) {
       const clerkId = event.data?.object?.metadata?.clerkId;
       await clerkClient.users.updateUserMetadata(clerkId!, {
         publicMetadata: {
+          expiredAt: event.data?.object?.metadata?.expiredAt,
           stripeId: event?.data?.object.customer,
         },
+        // privateMetadata: { stripeId: event?.data?.object.customer },
       });
     }
     console.log(event?.data?.object);
