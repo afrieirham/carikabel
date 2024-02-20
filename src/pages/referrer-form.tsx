@@ -80,7 +80,12 @@ function ReferrerFormPage() {
             name="companyId"
             render={({ field }) => {
               const selectedCompany = companies?.find(
-                (c) => field.value === `${c.id}-${c.name}`,
+                (company) =>
+                  field.value ===
+                  JSON.stringify({
+                    id: company.id,
+                    name: company.name,
+                  }).replaceAll('"', "'"),
               );
               return (
                 <FormItem>
@@ -117,7 +122,11 @@ function ReferrerFormPage() {
                     <PopoverContent className="w-full p-2">
                       <Command
                         filter={(value, search) => {
-                          if (value.slice(22).includes(search)) return 1;
+                          const { name } = JSON.parse(
+                            value.replaceAll("'", '"'),
+                          ) as { id: string; name: string };
+
+                          if (name?.includes(search)) return 1;
                           return 0;
                         }}
                       >
@@ -125,7 +134,11 @@ function ReferrerFormPage() {
                         <CommandEmpty>No company found.</CommandEmpty>
                         <CommandGroup className="flex h-[380px] w-[400px] flex-col space-y-2 overflow-scroll">
                           {companies?.map((company) => {
-                            const companyValue = `${company.id}-${company.name}`;
+                            const companyValue = JSON.stringify({
+                              id: company.id,
+                              name: company.name,
+                            }).replaceAll('"', "'");
+
                             return (
                               <CommandItem
                                 key={company.id}
