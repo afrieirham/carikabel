@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -97,12 +96,11 @@ function ReferrerFormPage() {
                           )}
                         >
                           <div className="flex items-center space-x-2">
-                            {Boolean(field.value) && (
-                              <Image
-                                width={50}
-                                height={50}
-                                src={selectedCompany?.logoUrl ?? ""}
-                                alt={`${selectedCompany?.name} logo`}
+                            {selectedCompany && Boolean(selectedCompany) && (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img
+                                src={selectedCompany.logoUrl}
+                                alt={`${selectedCompany.name} logo`}
                                 className="h-6 w-6 rounded-sm border"
                               />
                             )}
@@ -148,9 +146,8 @@ function ReferrerFormPage() {
                                       : "opacity-0",
                                   )}
                                 />
-                                <Image
-                                  width={50}
-                                  height={50}
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
                                   src={company.logoUrl}
                                   alt={`${company.name} logo`}
                                   className="h-6 w-6 rounded-sm border"
