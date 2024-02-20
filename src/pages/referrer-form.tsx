@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -32,6 +33,7 @@ import { cn } from "~/lib/utils";
 import { api } from "~/utils/api";
 
 function ReferrerFormPage() {
+  const [open, setOpen] = useState(false);
   const { data: companies } = api.company.getAll.useQuery();
 
   const formSchema = z.object({
@@ -84,7 +86,7 @@ function ReferrerFormPage() {
               return (
                 <FormItem>
                   <FormLabel>Company</FormLabel>
-                  <Popover>
+                  <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
                         <Button
@@ -127,6 +129,7 @@ function ReferrerFormPage() {
                                 if (field.value === company.id)
                                   form.setValue("companyId", "");
                                 else form.setValue("companyId", company.id);
+                                setOpen(false);
                               }}
                               className="flex items-center space-x-2 rounded p-2 hover:bg-zinc-100"
                             >
@@ -157,6 +160,12 @@ function ReferrerFormPage() {
               );
             }}
           />
+          {/* <div className="flex items-center">
+            <p>Your company not listed?</p>
+            <Button type="button" variant="link">
+              Add your company.
+            </Button>
+          </div> */}
           <h1 className="text-2xl">About you</h1>
           <FormField
             control={form.control}
@@ -216,7 +225,6 @@ function ReferrerFormPage() {
               </FormItem>
             )}
           />
-
           <Button type="submit">Submit</Button>
         </form>
       </Form>
