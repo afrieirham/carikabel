@@ -81,7 +81,7 @@ function ReferrerFormPage() {
             name="companyId"
             render={({ field }) => {
               const selectedCompany = companies?.find(
-                (c) => c.id === field.value,
+                (c) => field.value === `${c.id}-${c.name}`,
               );
               return (
                 <FormItem>
@@ -121,36 +121,39 @@ function ReferrerFormPage() {
                         <CommandInput placeholder="Search company..." />
                         <CommandEmpty>No company found.</CommandEmpty>
                         <CommandGroup className="flex h-[380px] w-[400px] flex-col space-y-2 overflow-scroll">
-                          {companies?.map((company) => (
-                            <CommandItem
-                              key={company.id}
-                              value={company.id}
-                              onSelect={() => {
-                                if (field.value === company.id)
-                                  form.setValue("companyId", "");
-                                else form.setValue("companyId", company.id);
-                                setOpen(false);
-                              }}
-                              className="flex items-center space-x-2 rounded p-2 hover:bg-zinc-100"
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  company.id === field.value
-                                    ? "opacity-100"
-                                    : "opacity-0",
-                                )}
-                              />
-                              <Image
-                                width={10}
-                                height={10}
-                                src={company.logoUrl}
-                                alt={`${company.name} logo`}
-                                className="h-6 w-6 rounded-sm border"
-                              />
-                              <p>{company.name}</p>
-                            </CommandItem>
-                          ))}
+                          {companies?.map((company) => {
+                            const companyValue = `${company.id}-${company.name}`;
+                            return (
+                              <CommandItem
+                                key={company.id}
+                                value={companyValue}
+                                onSelect={() => {
+                                  if (field.value === companyValue)
+                                    form.setValue("companyId", "");
+                                  else form.setValue("companyId", companyValue);
+                                  setOpen(false);
+                                }}
+                                className="flex items-center space-x-2 rounded p-2 hover:bg-zinc-100"
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    companyValue === field.value
+                                      ? "opacity-100"
+                                      : "opacity-0",
+                                  )}
+                                />
+                                <Image
+                                  width={10}
+                                  height={10}
+                                  src={company.logoUrl}
+                                  alt={`${company.name} logo`}
+                                  className="h-6 w-6 rounded-sm border"
+                                />
+                                <p>{company.name}</p>
+                              </CommandItem>
+                            );
+                          })}
                         </CommandGroup>
                       </Command>
                     </PopoverContent>
