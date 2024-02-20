@@ -99,8 +99,8 @@ function ReferrerFormPage() {
                           <div className="flex items-center space-x-2">
                             {Boolean(field.value) && (
                               <Image
-                                width={10}
-                                height={10}
+                                width={50}
+                                height={50}
                                 src={selectedCompany?.logoUrl ?? ""}
                                 alt={`${selectedCompany?.name} logo`}
                                 className="h-6 w-6 rounded-sm border"
@@ -117,7 +117,12 @@ function ReferrerFormPage() {
                       </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-full p-2">
-                      <Command>
+                      <Command
+                        filter={(value, search) => {
+                          if (value.slice(22).includes(search)) return 1;
+                          return 0;
+                        }}
+                      >
                         <CommandInput placeholder="Search company..." />
                         <CommandEmpty>No company found.</CommandEmpty>
                         <CommandGroup className="flex h-[380px] w-[400px] flex-col space-y-2 overflow-scroll">
@@ -144,8 +149,8 @@ function ReferrerFormPage() {
                                   )}
                                 />
                                 <Image
-                                  width={10}
-                                  height={10}
+                                  width={50}
+                                  height={50}
                                   src={company.logoUrl}
                                   alt={`${company.name} logo`}
                                   className="h-6 w-6 rounded-sm border"
