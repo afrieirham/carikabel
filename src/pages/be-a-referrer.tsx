@@ -31,7 +31,7 @@ import {
 import { cn } from "~/lib/utils";
 import { api } from "~/utils/api";
 
-function ReferrerAddPage() {
+function ReferrerFormPage() {
   const [open, setOpen] = useState(false);
   const { data: companies } = api.company.getAll.useQuery();
 
@@ -312,4 +312,4 @@ function ReferrerAddPage() {
   );
 }
 
-export default ReferrerAddPage;
+export default ReferrerFormPage;
