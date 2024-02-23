@@ -43,15 +43,17 @@ function ReferrerAddPage() {
 
   return (
     <main className="mx-auto flex h-screen w-full max-w-md flex-col items-center justify-center space-y-2">
-      <Button asChild variant="link">
-        <Link href="/referrer/company">back</Link>
-      </Button>
+      <div className="w-full">
+        <Button asChild variant="link" className="p-0">
+          <Link href="/referrer/company">← back to company</Link>
+        </Button>
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full flex-col space-y-8"
+          className="flex w-full flex-col space-y-6"
         >
-          <h1 className="text-2xl">About you</h1>
+          <h2 className="font-bold">About you</h2>
           <FormField
             control={form.control}
             name="name"
@@ -71,12 +73,12 @@ function ReferrerAddPage() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Phone</FormLabel>
-                <FormDescription className="text-xs">
-                  For internal use
-                </FormDescription>
                 <FormControl>
                   <Input placeholder="6013 123 1234" {...field} />
                 </FormControl>
+                <FormDescription className="text-xs">
+                  For internal use
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -87,12 +89,12 @@ function ReferrerAddPage() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Email</FormLabel>
-                <FormDescription className="text-xs">
-                  How candidates will contact you.
-                </FormDescription>
                 <FormControl>
                   <Input placeholder="farah@gmail.com" {...field} />
                 </FormControl>
+                <FormDescription className="text-xs">
+                  How candidates will contact you.
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

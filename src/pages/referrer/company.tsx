@@ -22,6 +22,7 @@ import {
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
+import { Input } from "~/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -38,6 +39,9 @@ function ReferrerCompanyPage() {
 
   const formSchema = z.object({
     companyId: z.string(),
+    companyName: z.string(),
+    linkedinUrl: z.string(),
+    jobsUrl: z.string(),
   });
 
   // 1. Define your form.
@@ -45,6 +49,9 @@ function ReferrerCompanyPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       companyId: "",
+      companyName: "",
+      linkedinUrl: "",
+      jobsUrl: "",
     },
   });
 
@@ -63,15 +70,17 @@ function ReferrerCompanyPage() {
 
   return (
     <main className="mx-auto flex h-screen w-full max-w-md flex-col items-center justify-center space-y-2">
-      <Button asChild variant="link">
-        <Link href="/dashboard">back</Link>
-      </Button>
+      <div className="w-full">
+        <Button asChild variant="link" className="p-0">
+          <Link href="/dashboard">← back to dashboard</Link>
+        </Button>
+      </div>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex w-full flex-col space-y-8"
+          className="flex w-full flex-col space-y-6"
         >
-          <h1 className="text-2xl">About your company</h1>
+          <h2 className="font-bold">Which company are you from?</h2>
           <FormField
             control={form.control}
             name="companyId"
@@ -86,7 +95,6 @@ function ReferrerCompanyPage() {
               );
               return (
                 <FormItem>
-                  <FormLabel>Company</FormLabel>
                   <Popover open={open} onOpenChange={setOpen}>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -175,8 +183,70 @@ function ReferrerCompanyPage() {
               );
             }}
           />
+          <div className="flex items-center justify-center space-x-2">
+            <hr className="w-full" />
+            <span className="text-sm text-gray-400">or</span>
+            <hr className="w-full" />
+          </div>
+          <div
+            className={`${Boolean(form.getValues("companyId")) ? "opacity-50" : "opacity-100"} space-y-6`}
+          >
+            <h2 className="font-bold">Add your company</h2>
+            <FormField
+              control={form.control}
+              name="companyName"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company name</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Google"
+                      disabled={Boolean(form.getValues("companyId"))}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="jobsUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company careers page</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://google.com/careers"
+                      disabled={Boolean(form.getValues("companyId"))}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="linkedinUrl"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Company LinkedIn</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="https://linkedin.com/company/google"
+                      disabled={Boolean(form.getValues("companyId"))}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
           <Button type="submit" disabled={loading}>
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Submit
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Continue
           </Button>
         </form>
       </Form>
