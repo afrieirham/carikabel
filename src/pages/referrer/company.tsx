@@ -1,6 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -16,13 +17,11 @@ import {
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "~/components/ui/form";
-import { Input } from "~/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -31,15 +30,13 @@ import {
 import { cn } from "~/lib/utils";
 import { api } from "~/utils/api";
 
-function ReferrerFormPage() {
+function ReferrerCompanyPage() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { data: companies } = api.company.getAll.useQuery();
 
   const formSchema = z.object({
-    name: z.string(),
-    phone: z.string(),
-    email: z.string().email(),
-    jobTitle: z.string(),
     companyId: z.string(),
   });
 
@@ -47,10 +44,6 @@ function ReferrerFormPage() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      phone: "",
-      email: "",
-      jobTitle: "",
       companyId: "",
     },
   });
@@ -59,7 +52,11 @@ function ReferrerFormPage() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    setLoading(true);
     console.log(values);
+    setTimeout(() => {
+      void router.push("/referrer/add");
+    }, 1000);
   }
 
   console.log(companies);
@@ -112,7 +109,7 @@ function ReferrerFormPage() {
                             {field.value ? (
                               <span>{selectedCompany?.name}</span>
                             ) : (
-                              "Add company"
+                              "Choose a company"
                             )}
                           </div>
                           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -178,76 +175,13 @@ function ReferrerFormPage() {
               );
             }}
           />
-          {/* <div className="flex items-center">
-            <p>Your company not listed?</p>
-            <Button type="button" variant="link">
-              Add your company.
-            </Button>
-          </div> */}
-          <h1 className="text-2xl">About you</h1>
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Farah Ahmad" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phone"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone</FormLabel>
-                <FormDescription className="text-xs">
-                  For internal use
-                </FormDescription>
-                <FormControl>
-                  <Input placeholder="6013 123 1234" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormDescription className="text-xs">
-                  How candidates will contact you.
-                </FormDescription>
-                <FormControl>
-                  <Input placeholder="farah@gmail.com" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="jobTitle"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job title (with seniority level)</FormLabel>
-                <FormControl>
-                  <Input placeholder="Senior Frontend Developer" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" disabled={loading}>
+            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}Submit
+          </Button>
         </form>
       </Form>
     </main>
   );
 }
 
-export default ReferrerFormPage;
+export default ReferrerCompanyPage;
