@@ -29,7 +29,9 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { cn } from "~/lib/utils";
-import { api } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
+
+type CompanyOutput = RouterOutputs["company"]["getAll"][number];
 
 function ReferrerFormPage() {
   const [open, setOpen] = useState(false);
@@ -70,6 +72,19 @@ function ReferrerFormPage() {
     console.log(values);
   }
 
+  if (!companies) {
+    return null;
+  }
+
+  // Create a map to avoid O(n) lookups
+  const companiesMap = companies.reduce(
+    (acc, company) => {
+      acc[company.selectValue] = company; // Use the unique identifier as the key
+      return acc;
+    },
+    {} as Record<string, CompanyOutput>,
+  );
+
   return (
     <main className="mx-auto flex w-full max-w-md flex-col items-center justify-center space-y-2 py-8">
       <div className="w-full">
@@ -87,14 +102,7 @@ function ReferrerFormPage() {
             control={form.control}
             name="companyId"
             render={({ field }) => {
-              const selectedCompany = companies?.find(
-                (company) =>
-                  field.value ===
-                  JSON.stringify({
-                    id: company.id,
-                    name: company.name,
-                  }).replaceAll('"', "'"),
-              );
+              const selectedCompany = companiesMap[field.value];
               return (
                 <FormItem>
                   <Popover open={open} onOpenChange={setOpen}>
@@ -108,16 +116,16 @@ function ReferrerFormPage() {
                           )}
                         >
                           <div className="flex items-center space-x-2">
-                            {selectedCompany && Boolean(selectedCompany) && (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img
-                                src={selectedCompany.logoUrl}
-                                alt={`${selectedCompany.name} logo`}
-                                className="h-6 w-6 rounded-sm border"
-                              />
-                            )}
-                            {field.value ? (
-                              <span>{selectedCompany?.name}</span>
+                            {selectedCompany && Boolean(selectedCompany) ? (
+                              <>
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img
+                                  src={selectedCompany.logoUrl}
+                                  alt={`${selectedCompany.name} logo`}
+                                  className="h-6 w-6 rounded-sm border"
+                                />
+                                <span>{selectedCompany.name}</span>
+                              </>
                             ) : (
                               "Choose a company"
                             )}
@@ -140,42 +148,39 @@ function ReferrerFormPage() {
                         <CommandInput placeholder="Search company..." />
                         <CommandEmpty>No company found.</CommandEmpty>
                         <CommandGroup className="flex h-[380px] w-[400px] flex-col space-y-2 overflow-scroll">
-                          {companies?.map((company) => {
-                            const companyValue = JSON.stringify({
-                              id: company.id,
-                              name: company.name,
-                            }).replaceAll('"', "'");
-
-                            return (
-                              <CommandItem
-                                key={company.id}
-                                value={companyValue}
-                                onSelect={() => {
-                                  if (field.value === companyValue)
-                                    form.setValue("companyId", "");
-                                  else form.setValue("companyId", companyValue);
-                                  setOpen(false);
-                                }}
-                                className="flex items-center space-x-2 rounded p-2 hover:bg-zinc-100"
-                              >
-                                <Check
-                                  className={cn(
-                                    "mr-2 h-4 w-4",
-                                    companyValue === field.value
-                                      ? "opacity-100"
-                                      : "opacity-0",
-                                  )}
-                                />
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
-                                <img
-                                  src={company.logoUrl}
-                                  alt={`${company.name} logo`}
-                                  className="h-6 w-6 rounded-sm border"
-                                />
-                                <p>{company.name}</p>
-                              </CommandItem>
-                            );
-                          })}
+                          {companies?.map((company) => (
+                            <CommandItem
+                              key={company.id}
+                              value={company.selectValue}
+                              onSelect={() => {
+                                if (field.value === company.selectValue)
+                                  form.setValue("companyId", "");
+                                else
+                                  form.setValue(
+                                    "companyId",
+                                    company.selectValue,
+                                  );
+                                setOpen(false);
+                              }}
+                              className="flex items-center space-x-2 rounded p-2 hover:bg-zinc-100"
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  company.selectValue === field.value
+                                    ? "opacity-100"
+                                    : "opacity-0",
+                                )}
+                              />
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img
+                                src={company.logoUrl}
+                                alt={`${company.name} logo`}
+                                className="h-6 w-6 rounded-sm border"
+                              />
+                              <p>{company.name}</p>
+                            </CommandItem>
+                          ))}
                         </CommandGroup>
                       </Command>
                     </PopoverContent>
