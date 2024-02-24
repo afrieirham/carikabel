@@ -1,8 +1,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
+import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import superjson from "superjson";
 import { z } from "zod";
 
 import { Button } from "~/components/ui/button";
@@ -29,13 +31,41 @@ import {
   PopoverTrigger,
 } from "~/components/ui/popover";
 import { cn } from "~/lib/utils";
-import { api, type RouterOutputs } from "~/utils/api";
+import { db } from "~/server/db";
+import { type RouterOutputs } from "~/utils/api";
 
-type CompanyOutput = RouterOutputs["company"]["getAll"][number];
+type CompanyRouterOutput = RouterOutputs["company"]["getAll"][number];
+interface CompanyOutput extends CompanyRouterOutput {
+  selectValue: string;
+}
 
-function ReferrerFormPage() {
+export const getServerSideProps = (async () => {
+  const companies = await db.company.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
+
+  return {
+    props: {
+      rawCompanies: superjson.stringify(
+        companies.map((c) => ({
+          ...c,
+          selectValue: JSON.stringify({
+            id: c.id,
+            name: c.name,
+          }).replaceAll('"', "'"),
+        })),
+      ),
+    },
+  };
+}) satisfies GetServerSideProps<{ rawCompanies: string }>;
+
+function ReferrerFormPage({
+  rawCompanies,
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const companies = superjson.parse<CompanyOutput[]>(rawCompanies);
   const [open, setOpen] = useState(false);
-  const { data: companies } = api.company.getAll.useQuery();
 
   const formSchema = z.object({
     // referrer details
@@ -72,14 +102,10 @@ function ReferrerFormPage() {
     console.log(values);
   }
 
-  if (!companies) {
-    return null;
-  }
-
   // Create a map to avoid O(n) lookups
   const companiesMap = companies.reduce(
     (acc, company) => {
-      acc[company.selectValue] = company; // Use the unique identifier as the key
+      acc[company.selectValue] = company;
       return acc;
     },
     {} as Record<string, CompanyOutput>,
@@ -148,7 +174,7 @@ function ReferrerFormPage() {
                         <CommandInput placeholder="Search company..." />
                         <CommandEmpty>No company found.</CommandEmpty>
                         <CommandGroup className="flex h-[380px] w-[400px] flex-col space-y-2 overflow-scroll">
-                          {companies?.map((company) => (
+                          {companies.map((company) => (
                             <CommandItem
                               key={company.id}
                               value={company.selectValue}
