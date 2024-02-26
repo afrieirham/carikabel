@@ -1,7 +1,6 @@
 import { SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { addYears, formatDistanceToNow, parseISO } from "date-fns";
-import { Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -54,8 +53,7 @@ export default function Dashboard() {
           </>
         )}
         {!hasAccess && (
-          <Button onClick={onSubscribe} disabled={loading}>
-            {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button onClick={onSubscribe} loading={loading}>
             Subscribe
           </Button>
         )}
