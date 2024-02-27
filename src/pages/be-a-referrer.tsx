@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import superjson from "superjson";
@@ -30,9 +31,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "~/components/ui/popover";
+import { useToast } from "~/components/ui/use-toast";
 import { cn } from "~/lib/utils";
 import { db } from "~/server/db";
-import { type RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 
 type CompanyRouterOutput = RouterOutputs["company"]["getAll"][number];
 interface CompanyOutput extends CompanyRouterOutput {
@@ -65,17 +67,21 @@ function ReferrerFormPage({
   rawCompanies,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const companies = superjson.parse<CompanyOutput[]>(rawCompanies);
+  const router = useRouter();
+  const { toast } = useToast();
+
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const formSchema = z.object({
     // referrer details
-    name: z.string(),
-    phone: z.string(),
-    email: z.string().email(),
-    jobTitle: z.string(),
+    name: z.string().min(1, { message: "Name is required" }),
+    phone: z.string().min(1, { message: "Phone is required" }),
+    email: z.string().email().min(1, { message: "Name is required" }),
+    jobTitle: z.string().min(1, { message: "Job title is required" }),
 
     // company details
-    companyId: z.string(),
+    companySelectValue: z.string(),
     companyName: z.string(),
     linkedinUrl: z.string(),
     jobsUrl: z.string(),
@@ -89,18 +95,12 @@ function ReferrerFormPage({
       email: "",
       jobTitle: "",
 
-      companyId: "",
+      companySelectValue: "",
       companyName: "",
       linkedinUrl: "",
       jobsUrl: "",
     },
   });
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-  }
 
   // Create a map to avoid O(n) lookups
   const companiesMap = companies.reduce(
@@ -110,6 +110,80 @@ function ReferrerFormPage({
     },
     {} as Record<string, CompanyOutput>,
   );
+
+  const { mutate } = api.referrer.createDraftReferrer.useMutation({
+    onSuccess: () => {
+      toast({
+        title: "Success!",
+        description: "Profile has been submitted.",
+      });
+      setTimeout(() => void router.push("/dashboard"), 1500);
+    },
+    onError: (error) => {
+      setLoading(false);
+      toast({
+        title: "Something went wrong!",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    const companyId = companiesMap[values.companySelectValue]?.id;
+    const hasNewCompany =
+      values.companyName && values.jobsUrl && values.linkedinUrl;
+
+    // if both is empty
+    if (!companyId && !hasNewCompany) {
+      toast({
+        title: "Company info not provided!",
+        description: "Please choose or add your company",
+      });
+      form.setError("companySelectValue", {
+        message: "required if no company added",
+      });
+
+      form.setError("companyName", {
+        message: "required if no company choosen",
+      });
+      form.setError("jobsUrl", {
+        message: "required if no company choosen",
+      });
+      form.setError("linkedinUrl", {
+        message: "required if no company choosen",
+      });
+
+      return;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { companySelectValue, ...rest } = values;
+
+    if (hasNewCompany) {
+      mutate({
+        ...rest,
+        companyName: "",
+        jobsUrl: "",
+        linkedinUrl: "",
+        companyId: "",
+      });
+      return;
+    }
+
+    if (companyId) {
+      form.resetField("companyName");
+      form.resetField("linkedinUrl");
+      form.resetField("jobsUrl");
+
+      mutate({ ...rest, companyId });
+      return;
+    }
+
+    setLoading(false);
+  }
+
+  const { companyName, jobsUrl, linkedinUrl } = form.watch();
 
   return (
     <main className="mx-auto flex w-full max-w-md flex-col items-center justify-center space-y-2 py-8">
@@ -126,7 +200,7 @@ function ReferrerFormPage({
           <h2 className="font-bold">Which company are you from?</h2>
           <FormField
             control={form.control}
-            name="companyId"
+            name="companySelectValue"
             render={({ field }) => {
               const selectedCompany = companiesMap[field.value];
               return (
@@ -136,6 +210,9 @@ function ReferrerFormPage({
                       <FormControl>
                         <Button
                           variant="outline"
+                          disabled={Boolean(
+                            companyName || jobsUrl || linkedinUrl,
+                          )}
                           className={cn(
                             "w-full justify-between",
                             !field.value && "text-muted-foreground",
@@ -180,12 +257,21 @@ function ReferrerFormPage({
                               value={company.selectValue}
                               onSelect={() => {
                                 if (field.value === company.selectValue)
-                                  form.setValue("companyId", "");
+                                  form.setValue("companySelectValue", "");
                                 else
                                   form.setValue(
-                                    "companyId",
+                                    "companySelectValue",
                                     company.selectValue,
                                   );
+
+                                // if current field has value (field.value is based on prev state, that's why logic seem off)
+                                if (!field.value) {
+                                  form.clearErrors("companySelectValue");
+                                  form.resetField("companyName");
+                                  form.resetField("linkedinUrl");
+                                  form.resetField("jobsUrl");
+                                }
+
                                 setOpen(false);
                               }}
                               className="flex items-center space-x-2 rounded p-2 hover:bg-zinc-100"
@@ -222,7 +308,7 @@ function ReferrerFormPage({
             <hr className="w-full" />
           </div>
           <div
-            className={`${Boolean(form.getValues("companyId")) ? "opacity-50" : "opacity-100"} space-y-6`}
+            className={`${Boolean(form.getValues("companySelectValue")) ? "opacity-50" : "opacity-100"} space-y-6`}
           >
             <h2 className="font-bold">Add your company</h2>
             <FormField
@@ -234,8 +320,14 @@ function ReferrerFormPage({
                   <FormControl>
                     <Input
                       placeholder="Google"
-                      disabled={Boolean(form.getValues("companyId"))}
+                      disabled={Boolean(form.getValues("companySelectValue"))}
                       {...field}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          form.clearErrors("companySelectValue");
+                        }
+                        field.onChange(e);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -251,8 +343,14 @@ function ReferrerFormPage({
                   <FormControl>
                     <Input
                       placeholder="https://google.com/careers"
-                      disabled={Boolean(form.getValues("companyId"))}
+                      disabled={Boolean(form.getValues("companySelectValue"))}
                       {...field}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          form.clearErrors("companySelectValue");
+                        }
+                        field.onChange(e);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -268,8 +366,14 @@ function ReferrerFormPage({
                   <FormControl>
                     <Input
                       placeholder="https://linkedin.com/company/google"
-                      disabled={Boolean(form.getValues("companyId"))}
+                      disabled={Boolean(form.getValues("companySelectValue"))}
                       {...field}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          form.clearErrors("companySelectValue");
+                        }
+                        field.onChange(e);
+                      }}
                     />
                   </FormControl>
                   <FormMessage />
@@ -336,7 +440,9 @@ function ReferrerFormPage({
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <Button type="submit" loading={loading}>
+            Submit
+          </Button>
         </form>
       </Form>
     </main>
