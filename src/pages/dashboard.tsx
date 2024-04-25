@@ -1,4 +1,4 @@
-import { SignOutButton, UserButton, useUser } from "@clerk/nextjs";
+import { UserButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { addYears, formatDistanceToNow, parseISO } from "date-fns";
 import { useRouter } from "next/router";
@@ -38,12 +38,12 @@ export default function Dashboard() {
   };
 
   return (
-    <main className="flex h-screen w-full flex-col items-center justify-center space-y-2">
-      <UserButton showName />
-      <div className="flex flex-col space-y-2">
+    <div className="flex w-full flex-col items-center justify-center space-y-2">
+      <nav className="flex w-full items-center justify-between border-b-2 bg-gray-100 p-4">
+        <p>CariKabel.com</p>
         {hasAccess && (
           <>
-            <p>
+            <p className="text-sm">
               Expired{" "}
               {formatDistanceToNow(parseISO(expiredAt), {
                 addSuffix: true,
@@ -51,16 +51,16 @@ export default function Dashboard() {
             </p>
           </>
         )}
-        {!hasAccess && (
+        <UserButton showName />
+      </nav>
+      {!hasAccess && (
+        <main className="flex w-full flex-col items-center justify-center gap-4 pt-8">
+          <p>You have no access. Subscribe to get 1-yaer access.</p>
           <Button onClick={onSubscribe} loading={loading}>
             Subscribe
           </Button>
-        )}
-
-        <SignOutButton signOutCallback={() => router.push("/")}>
-          <Button variant="ghost">Logout</Button>
-        </SignOutButton>
-      </div>
-    </main>
+        </main>
+      )}
+    </div>
   );
 }
