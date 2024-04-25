@@ -5,6 +5,8 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
+import { Card } from "~/components/ui/card";
+import { api } from "~/utils/api";
 
 export default function Dashboard() {
   const [loading, setLoading] = useState(false);
@@ -15,6 +17,9 @@ export default function Dashboard() {
   const expiredAt = auth.user?.publicMetadata.expiredAt as string;
   const expiredDate = new Date(expiredAt);
   const hasAccess = today < expiredDate;
+
+  const response = api.company.subscriberGetAll.useQuery({ hasAccess });
+  const companies = response.data;
 
   if (!auth.user) {
     return null;
@@ -39,19 +44,21 @@ export default function Dashboard() {
 
   return (
     <div className="flex w-full flex-col items-center justify-center space-y-2">
-      <nav className="flex w-full items-center justify-between border-b-2 bg-gray-100 p-4">
-        <p>CariKabel.com</p>
-        {hasAccess && (
-          <>
-            <p className="text-sm">
-              Expired{" "}
-              {formatDistanceToNow(parseISO(expiredAt), {
-                addSuffix: true,
-              })}
-            </p>
-          </>
-        )}
-        <UserButton showName />
+      <nav className="w-full border-b-2 bg-gray-100">
+        <div className="mx-auto flex max-w-screen-xl items-center justify-between p-4">
+          <p className="hidden sm:block">🤝 CariKabel.com</p>
+          {hasAccess && (
+            <>
+              <p className="text-center text-sm">
+                Expired{" "}
+                {formatDistanceToNow(parseISO(expiredAt), {
+                  addSuffix: true,
+                })}
+              </p>
+            </>
+          )}
+          <UserButton />
+        </div>
       </nav>
       {!hasAccess && (
         <main className="flex w-full flex-col items-center justify-center gap-4 pt-8">
@@ -61,6 +68,52 @@ export default function Dashboard() {
           </Button>
         </main>
       )}
+      <div className="grid w-full max-w-screen-xl grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
+        {companies?.map((company) => (
+          <Card key={company.id} className="space-y-6 p-4">
+            <div className="space-y-4">
+              <div className="flex items-center gap-4">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={company?.logoUrl}
+                  alt={`${company?.name} logo`}
+                  className="h-10 w-10 rounded border"
+                />
+                <p className="">{company?.name}</p>
+              </div>
+              <div className="space-x-4">
+                <a
+                  href={company.jobsUrl}
+                  target="_blank"
+                  className="text-xs hover:underline"
+                >
+                  Job Openings ↗
+                </a>
+
+                <a
+                  href={company.linkedinUrl}
+                  target="_blank"
+                  className="text-xs hover:underline"
+                >
+                  LinkedIn ↗
+                </a>
+              </div>
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs underline">Referrers</p>
+              <div className="space-y-4">
+                {company.Referrer.map((referrer) => (
+                  <div key={referrer.id} className="space-y-1 text-xs">
+                    <p className="font-bold">{referrer.name}</p>
+                    <p>{referrer.jobTitle}</p>
+                    <p>{referrer.email}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }
