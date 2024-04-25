@@ -58,9 +58,6 @@ export default function Dashboard() {
           </Button>
         )}
 
-        <Button asChild>
-          <Link href="/be-a-referrer">Be a referrer</Link>
-        </Button>
         <SignOutButton signOutCallback={() => router.push("/")}>
           <Button variant="ghost">Logout</Button>
         </SignOutButton>
