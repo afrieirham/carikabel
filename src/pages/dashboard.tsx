@@ -1,7 +1,6 @@
 import { SignOutButton, UserButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { addYears, formatDistanceToNow, parseISO } from "date-fns";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 

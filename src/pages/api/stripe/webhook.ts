@@ -56,7 +56,6 @@ export default async function handler(
         // privateMetadata: { stripeId: event?.data?.object.customer },
       });
     }
-    console.log(event?.data?.object);
   }
   res.json({ received: true });
 }

@@ -24,9 +24,9 @@ model Company {
 model Referrer {
     id        String   @id @default(cuid())
     name      String
-    phone     String
     email     String   @unique
     jobTitle  String
+    phone     String?
     companyId String?
     company   Company? @relation(fields: [companyId], references: [id])
     createdAt DateTime @default(now())
