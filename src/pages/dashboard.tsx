@@ -20,6 +20,7 @@ export default function Dashboard() {
 
   const response = api.company.subscriberGetAll.useQuery({ hasAccess });
   const companies = response.data;
+  const isLoading = response.isLoading;
 
   if (!auth.user) {
     return null;
@@ -57,7 +58,12 @@ export default function Dashboard() {
               </p>
             </>
           )}
-          <UserButton />
+          <div className="hidden sm:block">
+            <UserButton showName />
+          </div>
+          <div className="block sm:hidden">
+            <UserButton />
+          </div>
         </div>
       </nav>
       {!hasAccess && (
@@ -67,6 +73,32 @@ export default function Dashboard() {
             Subscribe
           </Button>
         </main>
+      )}
+      {hasAccess && isLoading && (
+        <div className="mx-auto flex items-center justify-center py-10">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="icon icon-tabler icon-tabler-loader animate-spin"
+            width="44"
+            height="44"
+            viewBox="0 0 24 24"
+            strokeWidth="1.5"
+            stroke="#2c3e50"
+            fill="none"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 6l0 -3" />
+            <path d="M16.25 7.75l2.15 -2.15" />
+            <path d="M18 12l3 0" />
+            <path d="M16.25 16.25l2.15 2.15" />
+            <path d="M12 18l0 3" />
+            <path d="M7.75 16.25l-2.15 2.15" />
+            <path d="M6 12l-3 0" />
+            <path d="M7.75 7.75l-2.15 -2.15" />
+          </svg>
+        </div>
       )}
       <div className="grid w-full max-w-screen-xl grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
         {companies?.map((company) => (
