@@ -36,56 +36,59 @@ export default function Home() {
             </SignedIn>
           </div>
         </nav>
-        <main className="flex flex-col items-center space-y-20 px-4 pb-32 pt-16">
-          <div className="flex flex-col items-center space-y-8">
-            <div>
-              <h1 className="text-center text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Stop applying for jobs blindly.
-              </h1>
-              <p className="mt-6 text-center text-lg leading-8 text-gray-600">
-                Get connected with 40+ referrers waiting to help you out!
+        <div className="flex flex-col items-center space-y-20 px-4 pt-16">
+          <main className="flex flex-col items-center space-y-20 px-4">
+            <div className="flex flex-col items-center space-y-8">
+              <div>
+                <h1 className="text-center text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+                  Stop applying for jobs blindly.
+                </h1>
+                <p className="mt-6 text-center text-lg leading-8 text-gray-600">
+                  Get connected with 40+ referrers waiting to help you out!
+                </p>
+              </div>
+              <SignInButton redirectUrl="/dashboard">
+                <Button>Get referred now!</Button>
+              </SignInButton>
+            </div>
+            <div className="flex flex-col space-y-2 rounded border border-dashed border-gray-300 p-4 text-center">
+              <p>
+                <span className="font-bold">kabel (/&apos;keɪbl/)</span> or
+                cable
               </p>
-            </div>
-            <SignInButton redirectUrl="/dashboard">
-              <Button>Get referred now!</Button>
-            </SignInButton>
-          </div>
-          <div className="flex flex-col space-y-2 rounded border border-dashed border-gray-300 p-4 text-center">
-            <p>
-              <span className="font-bold">kabel (/&apos;keɪbl/)</span> or cable
-            </p>
-            <p>
-              definition: “orang dalam” or referrer (ie. someone in a company
-              that can help you get a job)
-            </p>
-            <div className="mx-auto flex text-center">
-              <p className="border-l-2 border-black px-2 text-lg">
-                &ldquo;zaman sekarang ni nak dapat kerja kena ada kabel
-                bro&rdquo;
+              <p>
+                definition: “orang dalam” or referrer (ie. someone in a company
+                that can help you get a job)
               </p>
+              <div className="mx-auto flex text-center">
+                <p className="border-l-2 border-black px-2 text-lg">
+                  &ldquo;zaman sekarang ni nak dapat kerja kena ada kabel
+                  bro&rdquo;
+                </p>
+              </div>
             </div>
-          </div>
-          <div className="flex max-w-screen-xl flex-col items-center justify-center space-y-8">
-            <p className="text-center text-gray-600">
-              We have referrers from these companies
-            </p>
-            <div className="flex flex-wrap justify-center gap-2 md:gap-4">
-              {marketingCompanies?.map((company) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={company.id}
-                  src={company.logoUrl}
-                  alt={`${company.name} logo`}
-                  className="h-10 w-10 rounded border"
-                />
-              ))}
+            <div className="flex max-w-screen-xl flex-col items-center justify-center space-y-8">
+              <p className="text-center text-gray-600">
+                We have referrers from these companies
+              </p>
+              <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+                {marketingCompanies?.map((company) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={company.id}
+                    src={company.logoUrl}
+                    alt={`${company.name} logo`}
+                    className="h-10 w-10 rounded border"
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-          <div className="mx-auto flex max-w-screen-lg flex-col space-y-4">
+          </main>
+          <section className="mx-auto flex max-w-screen-lg flex-col space-y-4">
             <h2 className="text-center text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               Why CariKabel?
             </h2>
-            <div className="max-w-lg space-y-8 ">
+            <div className="max-w-xl space-y-8 ">
               <p>
                 CariKabel.com is a platform that connects you (the job seekers)
                 with employees from a company.
@@ -118,8 +121,8 @@ export default function Home() {
                 </SignInButton>
               </div>
             </div>
-          </div>
-          <div className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4">
+          </section>
+          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               No job openings relevant to you? 😢
             </h2>
@@ -137,7 +140,7 @@ export default function Home() {
                 className="w-full max-w-screen-sm rounded-lg border p-4"
               />
             </a>
-            <div className="max-w-lg space-y-4 ">
+            <div className="max-w-xl space-y-4 ">
               <p>
                 Sometimes companies have roles that are not advertised publicly.
               </p>
@@ -156,8 +159,8 @@ export default function Home() {
                 more opportunities that you might not know.
               </p>
             </div>
-          </div>
-          <div className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4">
+          </section>
+          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               Here&apos;s what other people have to say.
             </h2>
@@ -167,8 +170,179 @@ export default function Home() {
               alt=""
               className="w-full max-w-screen-sm rounded-lg border p-4"
             />
-          </div>
-        </main>
+          </section>
+          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4 ">
+            <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
+              FAQs ❓
+            </h2>
+            <div className="mx-auto max-w-xl space-y-8">
+              <div className="space-y-2">
+                <b>Why do I need to pay?</b>
+                <p>
+                  To put it simply, it’s a way for me to filter serious job
+                  applicants. If you are willing to spend invest RM100 to get
+                  direct access to referrers, it shows you are serious about
+                  getting a job and chances are, you are a high-quality
+                  candidates.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <b>
+                  Can I share my account with other people like my friends or
+                  family?
+                </b>
+                <p>
+                  No. One purchase is for one email only. You are prohibited to
+                  share, duplicate, download the data inside the referrers
+                  directory in any shape way or form.
+                </p>
+                <p>
+                  If other people want to get the access to the database, they
+                  should make a purchase on their own behalf. People who do not
+                  comply to this will have their access revoked permanently.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <b>How can I know the referrers are serious too?</b>
+                <p>
+                  The referrers are filtered and reviewed before they are
+                  included in the list. All of them are incentivise through
+                  their company’s referral program. It means they will get some
+                  commission if they manage to help you land a job there. You
+                  can read more about{" "}
+                  <a
+                    className="text-gray-700 underline underline-offset-2 transition-colors hover:text-black"
+                    target="_blank"
+                    href="https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/tk-designingandmanagingsuccessfulemployeereferralprograms.aspx#:~:text=An%20employee%20referral%20program%20is,for%20jobs%20in%20their%20organizations."
+                  >
+                    Employee Referral Program.
+                  </a>
+                </p>
+              </div>
+              <div className="space-y-2">
+                <b>
+                  Will I get a job if I pay and contact the referrers? What if I
+                  failed to land a job?
+                </b>
+                <p>
+                  Both me and the referrers can’t guarantee a job placement. It
+                  depends on the hiring manager for the role and your
+                  suitability as a candidate. If the company find that you are
+                  not a good fit, there’s nothing we can do about it.
+                </p>
+                <p>
+                  This platform only helps you to get connected, not hired.
+                  Think of it as a place for you to build your own kabels (or
+                  network).
+                </p>
+              </div>
+              <div className="space-y-2">
+                <b>
+                  I’ve emailed the referrers but none of them replied back. What
+                  should I do?
+                </b>
+                <p>
+                  If it’s more than for 5 business days since you emailed them.
+                  You can forward the email and include the referrer’s details
+                  to{" "}
+                  <a
+                    className="text-gray-700 underline underline-offset-2 transition-colors hover:text-black"
+                    target="_blank"
+                    href="mailto:afrie@kerja-it.com"
+                  >
+                    afrie@kerja-it.com
+                  </a>
+                  .
+                </p>
+                <p>
+                  I will try my best to escalate your problem to them
+                  personally. I will also ensure that the referrers are
+                  committed doing this. If they are not responsive or being
+                  rude, please let me know.
+                </p>
+              </div>
+              <div className="space-y-2">
+                <b>I’m interested to join as a referrer, how can I do that?</b>
+                <p>
+                  First of all, thank you for your interest. Secondly, does your
+                  company have{" "}
+                  <a
+                    className="text-gray-700 underline underline-offset-2 transition-colors hover:text-black"
+                    target="_blank"
+                    href="https://www.shrm.org/resourcesandtools/tools-and-samples/toolkits/pages/tk-designingandmanagingsuccessfulemployeereferralprograms.aspx#:~:text=An%20employee%20referral%20program%20is,for%20jobs%20in%20their%20organizations."
+                  >
+                    Employee Referral Program.
+                  </a>
+                  ? If yes, then you can contact me directly on{" "}
+                  <a
+                    href="https://x.com/afrieirham_"
+                    target="_blank"
+                    className="text-gray-700 underline underline-offset-2 transition-colors hover:text-black"
+                  >
+                    Twitter
+                  </a>{" "}
+                  or{" "}
+                  <a
+                    href="https://t.me/afrieirham"
+                    target="_blank"
+                    className="text-gray-700 underline underline-offset-2 transition-colors hover:text-black"
+                  >
+                    Telegram
+                  </a>
+                  .
+                </p>
+              </div>
+              <p>
+                Any other questions or problems? Contact me at{" "}
+                <a
+                  className="text-gray-700 underline underline-offset-2 transition-colors hover:text-black"
+                  target="_blank"
+                  href="mailto:afrie@kerja-it.com"
+                >
+                  afrie@kerja-it.com
+                </a>
+              </p>
+            </div>
+          </section>
+          <footer>
+            <div className="mx-auto max-w-screen-lg pb-16">
+              <nav className="flex justify-center gap-4" aria-label="Footer">
+                <div className="pb-6">
+                  <a
+                    target="_blank"
+                    href="mailto:afrie@kerja-it.com"
+                    className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                  >
+                    Email
+                  </a>
+                </div>
+                <div className="pb-6">
+                  <a
+                    target="_blank"
+                    href="https://x.com/afrieirham_"
+                    className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                  >
+                    Twitter
+                  </a>
+                </div>
+                <div className="pb-6">
+                  <a
+                    target="_blank"
+                    href="https://t.me/afrieirham"
+                    className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                  >
+                    Telegram
+                  </a>
+                </div>
+              </nav>
+
+              <p className="text-center text-xs leading-5 text-gray-500">
+                &copy; {new Date().getFullYear()} CariKabel.com, All rights
+                reserved.
+              </p>
+            </div>
+          </footer>
+        </div>
       </div>
     </>
   );
