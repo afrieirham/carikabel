@@ -85,7 +85,7 @@ export default function Home() {
             <h2 className="text-center text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               Why CariKabel?
             </h2>
-            <div className="max-w-lg space-y-8 text-center">
+            <div className="max-w-lg space-y-8 ">
               <p>
                 CariKabel.com is a platform that connects you (the job seekers)
                 with employees from a company.
@@ -118,6 +118,55 @@ export default function Home() {
                 </SignInButton>
               </div>
             </div>
+          </div>
+          <div className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4">
+            <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
+              No job openings relevant to you? 😢
+            </h2>
+            <p className="text-gray-600 ">
+              You could actually still benefits from it!
+            </p>
+            <a
+              target="_blank"
+              href="https://twitter.com/itsfaizhasnul/status/1637338326557667329"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/tweet-1.png"
+                alt=""
+                className="w-full max-w-screen-sm rounded-lg border p-4"
+              />
+            </a>
+            <div className="max-w-lg space-y-4 ">
+              <p>
+                Sometimes companies have roles that are not advertised publicly.
+              </p>
+              <div>
+                <p>Maybe they don&apos;t have time to update it,</p>
+                <p>
+                  Maybe they haven&apos;t come up with the job description yet,
+                </p>
+                <p>
+                  Or maybe they are practicing “referrals only” job
+                  applications.
+                </p>
+              </div>
+              <p>
+                By having direct access to them, you are opening yourself up to
+                more opportunities that you might not know.
+              </p>
+            </div>
+          </div>
+          <div className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4">
+            <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
+              Here&apos;s what other people have to say.
+            </h2>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/testimony.png"
+              alt=""
+              className="w-full max-w-screen-sm rounded-lg border p-4"
+            />
           </div>
         </main>
       </div>
