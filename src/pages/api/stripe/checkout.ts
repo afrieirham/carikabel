@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe";
-import { getBaseUrl } from "~/utils/api";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 const productId = process.env.STRIPE_PRODUCT_ID!;
@@ -11,6 +10,7 @@ interface ExtendedNextApiRequest extends NextApiRequest {
     email: string;
     clerkId: string;
     expiredAt: string;
+    baseUrl: string;
   };
 }
 
@@ -22,11 +22,9 @@ export default async function handler(
     return res.status(405).json({ message: "method not allowed" });
   }
 
-  const { email, clerkId, expiredAt } = req.body;
+  const { email, clerkId, expiredAt, baseUrl } = req.body;
 
   try {
-    const baseUrl = getBaseUrl();
-
     const checkoutSession = await stripe.checkout.sessions.create({
       metadata: { clerkId, expiredAt },
       mode: "payment",

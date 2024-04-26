@@ -6,9 +6,11 @@ import { useState } from "react";
 
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
+import { useHostName } from "~/hooks/useHostName";
 import { api } from "~/utils/api";
 
 export default function Dashboard() {
+  const hostname = useHostName();
   const [loading, setLoading] = useState(false);
   const auth = useUser();
   const router = useRouter();
@@ -35,6 +37,7 @@ export default function Dashboard() {
           email: auth.user.primaryEmailAddress?.emailAddress,
           clerkId: auth.user.id,
           expiredAt: addYears(today, 1).toISOString(),
+          baseUrl: hostname,
         },
       );
       void router.push(data.redirect);
