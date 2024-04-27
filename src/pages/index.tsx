@@ -6,6 +6,14 @@ import SEOHead from "~/components/molecule/SEOHead";
 import { Button } from "~/components/ui/button";
 import { marketingCompanies } from "~/constant";
 
+function CTAButton() {
+  return (
+    <Button asChild>
+      <Link href="/dashboard">Get referred now!</Link>
+    </Button>
+  );
+}
+
 export default function Home() {
   return (
     <>
@@ -47,9 +55,7 @@ export default function Home() {
                   Get connected with 40+ referrers waiting to help you out!
                 </p>
               </div>
-              <SignInButton redirectUrl="/dashboard">
-                <Button>Get referred now!</Button>
-              </SignInButton>
+              <CTAButton />
             </div>
             <div className="flex flex-col space-y-2 rounded border border-dashed border-gray-300 p-4 text-center">
               <p>
@@ -116,9 +122,7 @@ export default function Home() {
               </p>
               <div className="flex items-center justify-center gap-4">
                 <p>If you&apos;re ready,</p>
-                <SignInButton redirectUrl="/dashboard">
-                  <Button>Get referred now!</Button>
-                </SignInButton>
+                <CTAButton />
               </div>
             </div>
           </section>
