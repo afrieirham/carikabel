@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 import CTAButton from "~/components/molecule/CTAButton";
 import NavBar from "~/components/molecule/NavBar";
@@ -7,6 +9,13 @@ import { Button } from "~/components/ui/button";
 import { marketingCompanies } from "~/constant";
 
 export default function Home() {
+  const router = useRouter();
+  const [shouldHighlight, setHighlight] = useState(false);
+
+  useEffect(() => {
+    setHighlight(router.asPath.includes("#apply-as-referrer"));
+  }, [router]);
+
   return (
     <>
       <SEOHead
@@ -69,7 +78,7 @@ export default function Home() {
               </div>
             </div>
           </main>
-          <section className="mx-auto flex max-w-screen-lg flex-col space-y-4">
+          <section className="mx-auto flex max-w-screen-lg flex-col space-y-4 px-4">
             <h2 className="text-center text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               Why CariKabel?
             </h2>
@@ -105,7 +114,7 @@ export default function Home() {
               </div>
             </div>
           </section>
-          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4">
+          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4 px-4">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               No job openings relevant to you? 😢
             </h2>
@@ -143,7 +152,7 @@ export default function Home() {
               </p>
             </div>
           </section>
-          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4">
+          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4 px-4">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               Here&apos;s what other people have to say.
             </h2>
@@ -154,7 +163,7 @@ export default function Home() {
               className="w-full max-w-screen-sm rounded-lg border bg-white p-4"
             />
           </section>
-          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4 ">
+          <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4 px-4">
             <h2 className="text-xl font-bold tracking-tight text-gray-900 sm:text-2xl">
               FAQs ❓
             </h2>
@@ -245,7 +254,11 @@ export default function Home() {
                 </p>
               </div>
               <div className="space-y-2" id="apply-as-referrer">
-                <b>I’m interested to join as a referrer, how can I do that?</b>
+                <b
+                  className={`transition-all ${shouldHighlight ? "bg-yellow-300" : ""}`}
+                >
+                  I’m interested to join as a referrer, how can I do that?
+                </b>
                 <p>
                   First of all, thank you for your interest. Secondly, does your
                   company have{" "}
@@ -316,6 +329,14 @@ export default function Home() {
                   >
                     Telegram
                   </a>
+                </div>
+                <div className="pb-6">
+                  <Link
+                    href="/#apply-as-referrer"
+                    className="text-sm leading-6 text-gray-600 hover:text-gray-900"
+                  >
+                    Apply as referrer
+                  </Link>
                 </div>
               </nav>
 
