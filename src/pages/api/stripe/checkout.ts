@@ -33,6 +33,7 @@ export default async function handler(
       line_items: [{ price: productId, quantity: 1 }],
       customer_email: email,
       customer_creation: "always",
+      allow_promotion_codes: true,
     });
 
     res.status(200).json({ redirect: checkoutSession.url });
