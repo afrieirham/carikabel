@@ -4,6 +4,7 @@ import { addYears, formatDistanceToNow, parseISO } from "date-fns";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+import SEOHead from "~/components/molecule/SEOHead";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import { useHostName } from "~/hooks/useHostName";
@@ -48,6 +49,12 @@ export default function Dashboard() {
 
   return (
     <div className="flex w-full flex-col items-center justify-center space-y-2">
+      <SEOHead
+        title="Dashboard | CariKabel.com"
+        description="CariKabel.com is a platform that connects you (the job seekers) with employees from a company."
+        path="/dashboard"
+        ogPath=""
+      />
       <nav className="w-full border-b-2 bg-gray-100">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between p-4">
           <p className="hidden sm:block">🤝 CariKabel.com</p>
