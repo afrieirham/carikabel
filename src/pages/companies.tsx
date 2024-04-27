@@ -2,9 +2,8 @@ import type { GetStaticProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import SuperJSON from "superjson";
 
-import CTAButton from "~/components/molecule/CTAButton";
+import Footer from "~/components/molecule/Footer";
 import NavBar from "~/components/molecule/NavBar";
-import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
 import { db } from "~/server/db";
 import type { RouterOutputs } from "~/utils/api";
@@ -71,17 +70,20 @@ function CompaniesPage({
                     LinkedIn ↗
                   </a>
                 </div>
+                <div className="space-x-4">
+                  <Link
+                    className="rounded border px-3 py-2 text-xs hover:bg-gray-100"
+                    href="/dashboard"
+                  >
+                    Contact referrals
+                  </Link>
+                </div>
               </div>
             </Card>
           ))}
         </div>
-        <div className="flex gap-4">
-          <CTAButton />
-          <Button variant="link" asChild>
-            <Link href="/#apply-as-referrer">Apply as referrer</Link>
-          </Button>
-        </div>
       </div>
+      <Footer />
     </div>
   );
 }
