@@ -10,6 +10,7 @@ import {
 export const companyRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.company.findMany({
+      where: { Referrer: { some: {} } },
       orderBy: {
         name: "asc",
       },

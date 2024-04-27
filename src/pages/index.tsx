@@ -1,18 +1,10 @@
-import { SignedIn } from "@clerk/clerk-react";
-import { SignInButton, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 
+import CTAButton from "~/components/molecule/CTAButton";
+import NavBar from "~/components/molecule/NavBar";
 import SEOHead from "~/components/molecule/SEOHead";
 import { Button } from "~/components/ui/button";
 import { marketingCompanies } from "~/constant";
-
-function CTAButton() {
-  return (
-    <Button asChild>
-      <Link href="/dashboard">Get referred now!</Link>
-    </Button>
-  );
-}
 
 export default function Home() {
   return (
@@ -24,26 +16,8 @@ export default function Home() {
         path="/"
       />
 
-      <div className="flex w-full flex-col items-center">
-        <nav className="w-full">
-          <div className="mx-auto flex max-w-screen-xl items-center justify-between p-4">
-            <div className="flex items-center gap-4">
-              <p className="text-3xl sm:block">🤝</p>
-              <p>CariKabel.com</p>
-            </div>
-
-            <SignedOut>
-              <SignInButton redirectUrl="/dashboard">
-                <Button variant="secondary">Login</Button>
-              </SignInButton>
-            </SignedOut>
-            <SignedIn>
-              <Button variant="secondary" asChild>
-                <Link href="/dashboard">Go to dashboard →</Link>
-              </Button>
-            </SignedIn>
-          </div>
-        </nav>
+      <div className="flex w-full flex-col items-center bg-gray-50">
+        <NavBar />
         <div className="flex flex-col items-center space-y-20 px-4 pt-16">
           <main className="flex flex-col items-center space-y-20 px-4">
             <div className="flex flex-col items-center space-y-8">
@@ -55,7 +29,12 @@ export default function Home() {
                   Get connected with 40+ referrers waiting to help you out!
                 </p>
               </div>
-              <CTAButton />
+              <div className="flex gap-4">
+                <CTAButton />
+                <Button asChild variant="link">
+                  <Link href="/companies">See company list →</Link>
+                </Button>
+              </div>
             </div>
             <div className="flex flex-col space-y-2 rounded border border-dashed border-gray-300 p-4 text-center">
               <p>
@@ -84,7 +63,7 @@ export default function Home() {
                     key={company.id}
                     src={company.logoUrl}
                     alt={`${company.name} logo`}
-                    className="h-10 w-10 rounded border"
+                    className="h-10 w-10 rounded border bg-white"
                   />
                 ))}
               </div>
@@ -141,7 +120,7 @@ export default function Home() {
               <img
                 src="/tweet-1.png"
                 alt=""
-                className="w-full max-w-screen-sm rounded-lg border p-4"
+                className="w-full max-w-screen-sm rounded-lg border bg-white p-4"
               />
             </a>
             <div className="max-w-xl space-y-4 ">
@@ -172,7 +151,7 @@ export default function Home() {
             <img
               src="/testimony.png"
               alt=""
-              className="w-full max-w-screen-sm rounded-lg border p-4"
+              className="w-full max-w-screen-sm rounded-lg border bg-white p-4"
             />
           </section>
           <section className="mx-auto flex max-w-screen-lg flex-col items-center space-y-4 ">
@@ -265,7 +244,7 @@ export default function Home() {
                   rude, please let me know.
                 </p>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-2" id="apply-as-referrer">
                 <b>I’m interested to join as a referrer, how can I do that?</b>
                 <p>
                   First of all, thank you for your interest. Secondly, does your
