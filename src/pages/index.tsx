@@ -30,8 +30,8 @@ export default function Home() {
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <Button asChild>
-                <Link href="/dashboard">Go to dashboard</Link>
+              <Button variant="secondary" asChild>
+                <Link href="/dashboard">Go to dashboard →</Link>
               </Button>
             </SignedIn>
           </div>
