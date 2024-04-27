@@ -4,6 +4,7 @@ import SuperJSON from "superjson";
 
 import Footer from "~/components/molecule/Footer";
 import NavBar from "~/components/molecule/NavBar";
+import SEOHead from "~/components/molecule/SEOHead";
 import { Card } from "~/components/ui/card";
 import { db } from "~/server/db";
 import type { RouterOutputs } from "~/utils/api";
@@ -35,6 +36,12 @@ function CompaniesPage({
 
   return (
     <div className="flex w-full flex-col items-center bg-gray-50">
+      <SEOHead
+        title="Available companies in CariKabel.com"
+        description="We have referreres from these companies ready to help you out!"
+        ogPath="/og.png"
+        path="/companies"
+      />
       <NavBar />
       <div className="flex flex-col items-center space-y-8 py-16">
         <h1 className="px-4 text-center text-4xl font-bold">
