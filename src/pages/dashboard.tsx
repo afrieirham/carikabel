@@ -48,14 +48,14 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="flex w-full flex-col items-center justify-center space-y-2">
+    <div className="flex w-full flex-col items-center justify-center space-y-2 bg-gray-50">
       <SEOHead
         title="Dashboard | CariKabel.com"
         description="CariKabel.com is a platform that connects you (the job seekers) with employees from a company."
         path="/dashboard"
         ogPath=""
       />
-      <nav className="w-full border-b-2 bg-gray-100">
+      <nav className="w-full border-b-2 bg-white">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between p-4">
           <p className="hidden sm:block">🤝 CariKabel.com</p>
           {hasAccess && (
