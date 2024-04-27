@@ -173,8 +173,8 @@ export default function Home() {
                 <b>Why do I need to pay?</b>
                 <p>
                   To put it simply, it’s a way for me to filter serious job
-                  applicants. If you are willing to spend invest RM100 to get
-                  direct access to referrers, it shows you are serious about
+                  applicants. If you are willing to <s>spend</s> invest RM100 to
+                  get direct access to referrers, it shows you are serious about
                   getting a job and chances are, you are a high-quality
                   candidates.
                 </p>
