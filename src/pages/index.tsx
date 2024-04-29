@@ -1,17 +1,45 @@
+import type { GetStaticProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import SuperJSON from "superjson";
 
 import CTAButton from "~/components/molecule/CTAButton";
 import Footer from "~/components/molecule/Footer";
 import NavBar from "~/components/molecule/NavBar";
 import SEOHead from "~/components/molecule/SEOHead";
 import { Button } from "~/components/ui/button";
-import { marketingCompanies } from "~/constant";
+import { db } from "~/server/db";
+import type { RouterOutputs } from "~/utils/api";
 
-export default function Home() {
+export const getStaticProps: GetStaticProps<{
+  rawCompanies: string;
+}> = async () => {
+  const companies = await db.company.findMany({
+    where: { Referrer: { some: {} } },
+    orderBy: {
+      name: "asc",
+    },
+    take: 50,
+  });
+
+  return {
+    props: {
+      rawCompanies: SuperJSON.stringify(companies),
+    },
+    // revalidate every 1 minute
+    revalidate: 60 * 1,
+  };
+};
+
+export default function Home({
+  rawCompanies,
+}: InferGetServerSidePropsType<typeof getStaticProps>) {
   const router = useRouter();
   const [shouldHighlight, setHighlight] = useState(false);
+
+  const companies =
+    SuperJSON.parse<RouterOutputs["company"]["getAll"]>(rawCompanies);
 
   useEffect(() => {
     setHighlight(router.asPath.includes("#apply-as-referrer"));
@@ -67,7 +95,7 @@ export default function Home() {
                 We have referrers from these companies
               </p>
               <div className="flex flex-wrap justify-center gap-2 md:gap-4">
-                {marketingCompanies?.map((company) => (
+                {companies?.map((company) => (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     key={company.id}
