@@ -1,6 +1,6 @@
 import { UserButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
-import { addYears, formatDistanceToNow, parseISO } from "date-fns";
+import { addYears, format, formatDistanceToNow, parseISO } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -58,26 +58,16 @@ export default function Dashboard() {
       />
       <nav className="w-full border-b bg-white">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between p-4">
-          <Link href="/dashboard" className="flex items-center gap-4">
+          <Link href="/" className="flex items-center gap-4">
             <p className="text-3xl sm:block">🤝</p>
             <p>CariKabel.com</p>
           </Link>
-          {hasAccess && (
-            <>
-              <p className="text-center text-sm">
-                Expired{" "}
-                {formatDistanceToNow(parseISO(expiredAt), {
-                  addSuffix: true,
-                })}
-              </p>
-            </>
-          )}
-          <div className="hidden sm:block">
-            <UserButton showName />
-          </div>
-          <div className="block sm:hidden">
-            <UserButton />
-          </div>
+          <UserButton
+            showName
+            appearance={{
+              elements: { userButtonTrigger: "bg-gray-100 py-1.5 px-2" },
+            }}
+          />
         </div>
       </nav>
       {!hasAccess && (
@@ -88,6 +78,18 @@ export default function Dashboard() {
           </Button>
         </main>
       )}
+      <div className="flex w-full max-w-screen-xl flex-col items-center justify-between gap-2 px-4 py-2 sm:flex-row">
+        {hasAccess && (
+          <div className="w-full text-xs">
+            <p>
+              Access for {formatDistanceToNow(parseISO(expiredAt))}.{" "}
+              <br className="sm:hidden" />
+              Valid until{" "}
+              {format(parseISO(expiredAt), "(EEE, do MMM yyyy 'at' h:mmaaa)")}.
+            </p>
+          </div>
+        )}
+      </div>
       {hasAccess && isLoading && (
         <div className="mx-auto flex items-center justify-center py-10">
           <svg
@@ -114,7 +116,7 @@ export default function Dashboard() {
           </svg>
         </div>
       )}
-      <div className="grid w-full max-w-screen-xl grid-cols-1 gap-4 p-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid w-full max-w-screen-xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-3">
         {companies?.map((company) => (
           <Card key={company.id} className="space-y-6 p-4">
             <div className="space-y-4">
