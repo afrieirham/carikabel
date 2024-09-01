@@ -1,6 +1,7 @@
 import { UserButton, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { addYears, formatDistanceToNow, parseISO } from "date-fns";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -55,9 +56,12 @@ export default function Dashboard() {
         path="/dashboard"
         ogPath=""
       />
-      <nav className="w-full border-b-2 bg-white">
+      <nav className="w-full border-b bg-white">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between p-4">
-          <p className="hidden sm:block">🤝 CariKabel.com</p>
+          <Link href="/dashboard" className="flex items-center gap-4">
+            <p className="text-3xl sm:block">🤝</p>
+            <p>CariKabel.com</p>
+          </Link>
           {hasAccess && (
             <>
               <p className="text-center text-sm">
