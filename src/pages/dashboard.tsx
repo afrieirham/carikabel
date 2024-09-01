@@ -90,6 +90,9 @@ export default function Dashboard() {
             </p>
           </div>
         )}
+        <Button className="w-full sm:w-auto" variant="outline" asChild>
+          <Link href="/be-a-referrer">Apply as referrer</Link>
+        </Button>
       </div>
       {hasAccess && isLoading && (
         <div className="mx-auto flex items-center justify-center py-10">
