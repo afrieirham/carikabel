@@ -13,8 +13,10 @@ function NavBar() {
         </Link>
 
         <SignedOut>
-          <SignInButton redirectUrl="/dashboard">
-            <Button variant="secondary">Login</Button>
+          <SignInButton forceRedirectUrl="/dashboard">
+            <Button variant="secondary">
+              <Link href="/dashboard">Login</Link>
+            </Button>
           </SignInButton>
         </SignedOut>
         <SignedIn>
