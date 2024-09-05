@@ -16,6 +16,11 @@ export const companyRouter = createTRPCRouter({
       },
     });
   }),
+  getOne: publicProcedure
+    .input(z.object({ companyId: z.string() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.company.findFirst({ where: { id: input.companyId } });
+    }),
   subscriberGetAll: privateProcedure
     .input(z.object({ hasAccess: z.boolean() }))
     .query(({ ctx, input }) => {

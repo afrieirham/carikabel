@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import superjson from "superjson";
 
+import Footer from "~/components/molecule/Footer";
 import NavBar from "~/components/molecule/NavBar";
 import { Input } from "~/components/ui/input";
 import { db } from "~/server/db";
@@ -50,9 +51,9 @@ function BeAReferrer({
       <NavBar />
       <div className="flex w-full max-w-screen-xl flex-col items-center justify-between gap-2 px-4 py-2 sm:flex-row">
         <div className="flex w-full flex-col space-y-4 py-6">
-          <h2 className="text-center font-bold">
+          <h1 className="text-center text-xl font-bold">
             Are you from any of these company?
-          </h2>
+          </h1>
 
           <div className="mx-auto w-full max-w-sm">
             <Input
@@ -91,6 +92,7 @@ function BeAReferrer({
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
