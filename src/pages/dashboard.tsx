@@ -1,10 +1,11 @@
-import { UserButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { addYears, format, formatDistanceToNow, parseISO } from "date-fns";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+import DashboardNavBar from "~/components/molecule/DashboardNavBar";
 import Footer from "~/components/molecule/Footer";
 import SEOHead from "~/components/molecule/SEOHead";
 import { Button } from "~/components/ui/button";
@@ -57,20 +58,7 @@ export default function Dashboard() {
         path="/dashboard"
         ogPath=""
       />
-      <nav className="w-full border-b bg-white">
-        <div className="mx-auto flex max-w-screen-xl items-center justify-between p-4">
-          <Link href="/" className="flex items-center gap-4">
-            <p className="text-3xl sm:block">🤝</p>
-            <p>CariKabel.com</p>
-          </Link>
-          <UserButton
-            showName
-            appearance={{
-              elements: { userButtonTrigger: "bg-gray-100 py-1.5 px-2" },
-            }}
-          />
-        </div>
-      </nav>
+      <DashboardNavBar />
       {!hasAccess && (
         <main className="flex w-full flex-col items-center justify-center gap-4 pt-8">
           <p>You have no access. Subscribe to get 1-year access.</p>

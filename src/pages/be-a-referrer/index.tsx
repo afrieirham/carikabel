@@ -1,10 +1,10 @@
-import { UserButton } from "@clerk/nextjs";
 import type { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import superjson from "superjson";
 
+import NavBar from "~/components/molecule/NavBar";
 import { Input } from "~/components/ui/input";
 import { db } from "~/server/db";
 import type { RouterOutputs } from "~/utils/api";
@@ -47,20 +47,7 @@ function BeAReferrer({
 
   return (
     <div className="flex w-full flex-col items-center justify-center space-y-2 bg-gray-50">
-      <nav className="w-full border-b bg-white">
-        <div className="mx-auto flex max-w-screen-xl items-center justify-between p-4">
-          <Link href="/" className="flex items-center gap-4">
-            <p className="text-3xl sm:block">🤝</p>
-            <p>CariKabel.com</p>
-          </Link>
-          <UserButton
-            showName
-            appearance={{
-              elements: { userButtonTrigger: "bg-gray-100 py-1.5 px-2" },
-            }}
-          />
-        </div>
-      </nav>
+      <NavBar />
       <div className="flex w-full max-w-screen-xl flex-col items-center justify-between gap-2 px-4 py-2 sm:flex-row">
         <div className="flex w-full flex-col space-y-4 py-6">
           <h2 className="text-center font-bold">
@@ -77,12 +64,16 @@ function BeAReferrer({
           </div>
 
           <div className="grid w-full max-w-screen-xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            <button className="rounded-md border bg-white p-4 text-sm hover:bg-gray-100">
+            <Link
+              href="/be-a-referrer/new"
+              className="rounded-md border bg-white p-4 text-sm hover:bg-gray-100"
+            >
               Add new company
-            </button>
+            </Link>
             {companies.map((c) => (
-              <button
+              <Link
                 key={c.id}
+                href={`/be-a-referrer/${c.id}`}
                 className="rounded-md border bg-white p-2 text-sm hover:bg-gray-100"
               >
                 <div className="flex items-center gap-4">
@@ -95,7 +86,7 @@ function BeAReferrer({
                   />
                   <p className="">{c?.name}</p>
                 </div>
-              </button>
+              </Link>
             ))}
           </div>
         </div>
