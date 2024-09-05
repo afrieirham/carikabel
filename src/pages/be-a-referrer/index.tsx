@@ -25,7 +25,7 @@ export const getServerSideProps = (async () => {
 
 type CompanyOutput = RouterOutputs["company"]["getAll"][number];
 
-function Apply({
+function BeAReferrer({
   rawCompanies,
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const originalCompanies = superjson.parse<CompanyOutput[]>(rawCompanies);
@@ -104,4 +104,4 @@ function Apply({
   );
 }
 
-export default Apply;
+export default BeAReferrer;
