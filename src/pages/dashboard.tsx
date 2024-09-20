@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
+import Footer from "~/components/molecule/Footer";
 import SEOHead from "~/components/molecule/SEOHead";
 import { Button } from "~/components/ui/button";
 import { Card } from "~/components/ui/card";
@@ -116,7 +117,7 @@ export default function Dashboard() {
           </svg>
         </div>
       )}
-      <div className="grid w-full max-w-screen-xl grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid w-full max-w-screen-xl grid-cols-1 gap-4 px-4 pb-16 sm:grid-cols-2 lg:grid-cols-3">
         {companies?.map((company) => (
           <Card key={company.id} className="space-y-6 p-4">
             <div className="space-y-4">
@@ -162,6 +163,7 @@ export default function Dashboard() {
           </Card>
         ))}
       </div>
+      <Footer />
     </div>
   );
 }
