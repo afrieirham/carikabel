@@ -17,7 +17,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    remotePatterns: [{ hostname: "*.supabase.co", protocol: "https" }],
+    remotePatterns: [{ hostname: "storage.carikabel.com", protocol: "https" }],
   },
 };
 
