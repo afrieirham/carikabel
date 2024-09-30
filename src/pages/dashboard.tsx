@@ -73,8 +73,12 @@ export default function Dashboard() {
       </nav>
       {!hasAccess && (
         <main className="flex w-full flex-col items-center justify-center gap-4 pt-8">
-          <p>You have no access. Subscribe to get 1-year access.</p>
-          <Button onClick={onSubscribe} loading={loading}>
+          <p>
+            {
+              "We're currently undergoing some changes and are not accepting new subscribers at this time."
+            }
+          </p>
+          <Button onClick={onSubscribe} loading={loading} disabled>
             Subscribe
           </Button>
         </main>
